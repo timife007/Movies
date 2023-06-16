@@ -12,12 +12,12 @@ import com.timife.movies.domain.model.MovieDetails
 
 fun MovieDto.toMoviesEntity(): MoviesEntity {
     return MoviesEntity(
-        id = id,
-        original_language = originalLanguage,
-        poster_path = posterPath,
-        release_date = releaseDate,
-        title = title,
-        vote_average = voteAverage
+        id = id ?: 0,
+        original_language = originalLanguage ?: "",
+        poster_path = posterPath ?: "",
+        release_date = releaseDate ?: "",
+        title = title ?: "",
+        vote_average = voteAverage ?: 0.0
     )
 }
 
@@ -34,19 +34,19 @@ fun MoviesEntity.toMovie(): Movie {
 
 fun MovieDetailsDto.toMovieDetails(): MovieDetails {
     return MovieDetails(
-        backdropPath = backdropPath,
-        homepage = homepage,
+        backdropPath = backdropPath ?: "",
+        homepage = homepage ?: "",
         id = id ?: 0,
-        posterPath = posterPath,
-        title = title,
-        language = originalLanguage,
-        tagline = tagline,
-        voteAverage = voteAverage,
-        overview = overview,
-        runtime = runtime,
-        genres = genres.map {
-            it.toGenre()
-        },
+        posterPath = posterPath ?: "",
+        title = title ?: "",
+        language = originalLanguage ?: "",
+        tagline = tagline ?: "",
+        voteAverage = voteAverage ?: 0.0,
+        overview = overview ?: "",
+        runtime = runtime ?: 0,
+        genres = genres?.map {
+            it?.toGenre() ?: Genre(0, "")
+        } ?: listOf(),
         releaseDate = releaseDate ?: ""
     )
 }
@@ -54,16 +54,16 @@ fun MovieDetailsDto.toMovieDetails(): MovieDetails {
 
 fun GenreDto.toGenre(): Genre {
     return Genre(
-        id = id,
-        name = name
+        id = id ?: 0,
+        name = name ?: ""
     )
 }
 
 fun CastDto.toCast(): Cast {
     return Cast(
-        castId = castId,
-        character = character,
-        name = name,
+        castId = castId ?: 0,
+        character = character ?: "",
+        name = name ?: "",
         profilePath = profilePath ?: ""
     )
 }

@@ -16,6 +16,7 @@ import com.timife.movies.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -49,7 +50,7 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getMovieCasts(id: Int): Resource<List<Cast>> {
         return try {
             val casts = api.getMovieCast(id = id)
-            Resource.Success(casts.castDto.map {
+            Resource.Success(casts.castDto?.map {
                 it.toCast()
             })
         } catch (e: IOException) {

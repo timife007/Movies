@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -48,8 +49,6 @@ fun DiscoverMoviesScreen(
     navController: NavController,
     movies: LazyPagingItems<Movie>,
 ) {
-    val context = LocalContext.current
-
     Scaffold(
         topBar = { TopAppBar() }
     ) {
@@ -57,7 +56,7 @@ fun DiscoverMoviesScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier) {
                 Text(
-                    text = "Trending",
+                    text = "Discover Movies",
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier
                         .padding(start = 16.dp, top = 16.dp, bottom = 5.dp)
@@ -75,17 +74,23 @@ fun DiscoverMoviesScreen(
                         MovieItem(movie = movie, modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate(Screen.MovieDetailsScreen.route + "/${movie.id}/")
+                                navController.navigate(Screen.MovieDetailsScreen.route + "/${movie.id}")
                             }
                             .padding(16.dp)
                         )
+                        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                    }
+                }
+                item {
+                    if (movies.loadState.append is LoadState.Loading) {
+                        CircularProgressIndicator()
                     }
                 }
             }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (movies.loadState.refresh is LoadState.Loading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             } else if (movies.loadState.refresh is LoadState.Error) {
                 (movies.loadState.refresh as LoadState.Error).error.message?.let { errorMessage ->
                     Text(

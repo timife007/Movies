@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.timife.movies.presentation.Screen
+import com.timife.movies.presentation.moviedetails.ui.MovieDetailScreen
 import com.timife.movies.presentation.movieslist.MoviesViewModel
 import com.timife.movies.presentation.movieslist.ui.DiscoverMoviesScreen
 import com.timife.movies.ui.theme.MoviesTheme
@@ -43,13 +44,13 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
-                    composable(Screen.MovieDetailsScreen.route + "/{movieId}/",
+                    composable(Screen.MovieDetailsScreen.route + "/{movieId}",
                         arguments = listOf(
                             navArgument(name = "movieId") {
                                 type = NavType.IntType
                             }
                         )) {
-
+                        MovieDetailScreen(navController = navController)
                     }
                 }
             }

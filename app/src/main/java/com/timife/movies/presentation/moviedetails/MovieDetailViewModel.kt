@@ -1,5 +1,6 @@
 package com.timife.movies.presentation.moviedetails
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,6 +12,7 @@ import com.timife.movies.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,39 +25,50 @@ class MovieDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val id = savedStateHandle.get<Int>("id") ?: return@launch
-            state = state.copy(isLoading = true)
+            savedStateHandle.get<Int>("movieId")?.let { id ->
+                Log.d("movieId",id.toString())
+                state = state.copy(isLoading = true)
 
-            val movieDetails = async { moviesRepository.getMovieDetails(id) }
-            val casts = async { moviesRepository.getMovieCasts(id) }
-            when (val details = movieDetails.await()) {
-                is Resource.Success -> {
-                    state = state.copy(movieDetails = details.data, isLoading = false, error = null)
+                val movieDetails = async { moviesRepository.getMovieDetails(id) }
+                val casts = async { moviesRepository.getMovieCasts(id) }
+                when (val details = movieDetails.await()) {
+                    is Resource.Success -> {
+                        state =
+                            state.copy(movieDetails = details.data, isLoading = false, error = null)
+                    }
+
+                    is Resource.Error -> {
+                        state =
+                            state.copy(
+                                isLoading = false,
+                                error = details.message,
+                                movieDetails = null
+                            )
+                    }
+
+                    else -> Unit
                 }
 
-                is Resource.Error -> {
-                    state =
-                        state.copy(isLoading = false, error = details.message, movieDetails = null)
+                when (val result = casts.await()) {
+                    is Resource.Success -> {
+                        state = state.copy(
+                            castsList = result.data ?: emptyList(),
+                            isLoading = false,
+                            error = null
+                        )
+                    }
+                    is Resource.Error -> {
+                        state =
+                            state.copy(
+                                isLoading = false,
+                                error = result.message,
+                                movieDetails = null
+                            )
+                    }
+                    else -> Unit
                 }
-
-                else -> Unit
             }
 
-            when (val result = casts.await()) {
-                is Resource.Success -> {
-                    state = state.copy(
-                        castsList = result.data ?: emptyList(),
-                        isLoading = false,
-                        error = null
-                    )
-                }
-
-                is Resource.Error -> {
-                    state =
-                        state.copy(isLoading = false, error = result.message, movieDetails = null)
-                }
-                else -> Unit
-            }
         }
     }
 

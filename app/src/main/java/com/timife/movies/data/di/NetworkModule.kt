@@ -1,4 +1,4 @@
-package com.timife.movies.data.remote.di
+package com.timife.movies.data.di
 
 import android.app.Application
 import com.chuckerteam.chucker.api.ChuckerCollector
@@ -10,7 +10,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory

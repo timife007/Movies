@@ -20,6 +20,6 @@ interface MovieDao {
     suspend fun clearMovies()
 
     @Query("SELECT * FROM moviesEntity")
-    suspend fun getPagedMovies(): PagingSource<Int, MoviesEntity>
+    fun getPagedMovies(): PagingSource<Int, MoviesEntity>
 
 }

@@ -5,11 +5,11 @@ import com.squareup.moshi.Json
 
 data class DiscoverMovies(
     @field:Json(name = "page")
-    val page: Int,
+    val page: Int?,
     @field:Json(name = "results")
-    val movieDtos: List<MovieDto>,
+    val moviesDto: List<MovieDto>?,
     @field:Json(name = "total_pages")
-    val totalPages: Int,
+    val totalPages: Int?,
     @field:Json(name = "total_results")
-    val totalResults: Int,
+    val totalResults: Int?
 )

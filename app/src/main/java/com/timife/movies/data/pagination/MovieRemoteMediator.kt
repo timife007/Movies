@@ -1,5 +1,6 @@
 package com.timife.movies.data.pagination
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -19,6 +20,7 @@ class MovieRemoteMediator @Inject constructor(
     private val database: MovieDatabase,
 ) : RemoteMediator<Int, MoviesEntity>() {
     private val remoteKeyDao = database.keyDao
+    private val moviesDao = database.dao
 
     override suspend fun load(
         loadType: LoadType,
@@ -35,7 +37,7 @@ class MovieRemoteMediator @Inject constructor(
                     if (remoteKey.loadKey == null) {
                         1
                     } else {
-                        remoteKeyDao.getRemoteKey().loadKey!! + 1
+                        remoteKeyDao.getRemoteKey().loadKey!! + 1 //2
                     }
                 }
             }
@@ -43,16 +45,17 @@ class MovieRemoteMediator @Inject constructor(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.dao.clearMovies()
+                    moviesDao.clearMovies()
                     remoteKeyDao.deleteRemoteKey()
                 }
-                val moviesEntity = movies.movieDtos.map {
+                val moviesEntity = movies.moviesDto?.map {
                     it.toMoviesEntity()
                 }
-                database.dao.upsertMovies(moviesEntity)
+                moviesDao.upsertMovies(moviesEntity ?: emptyList())
                 remoteKeyDao.insertOrReplace(RemoteKey("", movies.page))
+                Log.d("loadKey", remoteKeyDao.getRemoteKey().loadKey.toString())
             }
-            MediatorResult.Success(endOfPaginationReached = movies.movieDtos.isEmpty())
+            MediatorResult.Success(endOfPaginationReached = movies.moviesDto?.isEmpty() ?: true)
 
         } catch (e: IOException) {
             MediatorResult.Error(e)

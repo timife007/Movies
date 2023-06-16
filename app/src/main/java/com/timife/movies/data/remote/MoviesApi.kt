@@ -12,7 +12,7 @@ interface MoviesApi {
     @GET("discover/movie?language=en-US&include_video=false&sort_by=popularity.desc")
     suspend fun discoverMovies(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
     ): DiscoverMovies
 
     @GET("movie/{movie_id}?language=en-US")

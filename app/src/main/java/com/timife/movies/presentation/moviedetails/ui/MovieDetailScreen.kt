@@ -53,7 +53,6 @@ import com.timife.movies.ui.theme.Typography
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieDetailScreen(
-    id: Int,
     viewModel: MovieDetailViewModel = hiltViewModel(),
     navController: NavController,
 ) {
