@@ -9,6 +9,7 @@ import com.timife.movies.data.remote.MoviesApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -16,17 +17,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
     @Singleton
     fun provideApiService(app: Application): MoviesApi {
-        val interceptor = Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("X-Auth-Token", BuildConfig.API_KEY)
-                .build()
-            chain.proceed(request)
-        }
         val chuckerInterceptor = ChuckerInterceptor.Builder(app)
             .collector(
                 ChuckerCollector(
@@ -41,7 +36,6 @@ object NetworkModule {
             .build()
 
         val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
             .addInterceptor(chuckerInterceptor)
             .build()
 
@@ -52,5 +46,4 @@ object NetworkModule {
             .build()
             .create(MoviesApi::class.java)
     }
-
 }

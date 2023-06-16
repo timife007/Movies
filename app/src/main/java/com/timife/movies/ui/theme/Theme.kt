@@ -9,21 +9,24 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = PurpleGrey80,
+    secondary = DeepYellow,
+    onPrimary = PurpleGrey80,
+    onBackground = Color.LightGray
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Purple80,
+    secondary = DeepYellow,
+    onBackground = Color.Black,
+    onPrimary = Color.Gray
 
 
     /* Other default colors to override
