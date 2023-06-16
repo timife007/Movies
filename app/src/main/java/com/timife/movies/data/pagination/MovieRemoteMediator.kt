@@ -53,7 +53,6 @@ class MovieRemoteMediator @Inject constructor(
                 }
                 moviesDao.upsertMovies(moviesEntity ?: emptyList())
                 remoteKeyDao.insertOrReplace(RemoteKey("", movies.page))
-                Log.d("loadKey", remoteKeyDao.getRemoteKey().loadKey.toString())
             }
             MediatorResult.Success(endOfPaginationReached = movies.moviesDto?.isEmpty() ?: true)
 

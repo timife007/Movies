@@ -83,7 +83,6 @@ dependencies {
     implementation (Deps.room)
     implementation (Deps.roomKtx)
     kapt (Deps.roomCompiler)
-    implementation (Deps.roomPaging)
 
     // Retrofit
     implementation (Deps.retrofit)
@@ -97,12 +96,17 @@ dependencies {
     implementation (Deps.viewModelCompose)
     implementation (Deps.materialIcons)
     implementation (Deps.flowLayout)
-    implementation (Deps.pagingCompose)
-    implementation (Deps.paging)
     implementation (Deps.swipeRefresh)
     implementation (Deps.hiltCompose)
     implementation (Deps.coilSvg)
     implementation (Deps.coilAccompanist)
+
+    //Paging
+    implementation (Deps.pagingCompose)
+    implementation (Deps.paging)
+    implementation (Deps.roomPaging)
+    implementation (Deps.rxJavaPaging)
+
 
     implementation (Deps.composeNavigation)
     implementation (Deps.composeLifecycle)
