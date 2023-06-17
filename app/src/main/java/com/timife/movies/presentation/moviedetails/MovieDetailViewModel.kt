@@ -24,52 +24,51 @@ class MovieDetailViewModel @Inject constructor(
     var state by mutableStateOf(MovieDetailsState())
 
     init {
-        viewModelScope.launch {
-            savedStateHandle.get<Int>("movieId")?.let { id ->
-                Log.d("movieId",id.toString())
-                state = state.copy(isLoading = true)
-
-                val movieDetails = async { moviesRepository.getMovieDetails(id) }
-                val casts = async { moviesRepository.getMovieCasts(id) }
-                when (val details = movieDetails.await()) {
-                    is Resource.Success -> {
-                        state =
-                            state.copy(movieDetails = details.data, isLoading = false, error = null)
-                    }
-
-                    is Resource.Error -> {
-                        state =
-                            state.copy(
-                                isLoading = false,
-                                error = details.message,
-                                movieDetails = null
-                            )
-                    }
-
-                    else -> Unit
-                }
-
-                when (val result = casts.await()) {
-                    is Resource.Success -> {
-                        state = state.copy(
-                            castsList = result.data ?: emptyList(),
-                            isLoading = false,
-                            error = null
-                        )
-                    }
-                    is Resource.Error -> {
-                        state =
-                            state.copy(
-                                isLoading = false,
-                                error = result.message,
-                                movieDetails = null
-                            )
-                    }
-                    else -> Unit
-                }
-            }
-
-        }
+//        viewModelScope.launch {
+//            savedStateHandle.get<Int>("movieId")?.let { id ->
+//                state = state.copy(isLoading = true)
+//
+//                val movieDetails = async { moviesRepository.getMovieDetails(id) }
+//                val casts = async { moviesRepository.getMovieCasts(id) }
+//                when (val details = movieDetails.await()) {
+//                    is Resource.Success -> {
+//                        state =
+//                            state.copy(movieDetails = details.data, isLoading = false, error = null)
+//                    }
+//
+//                    is Resource.Error -> {
+//                        state =
+//                            state.copy(
+//                                isLoading = false,
+//                                error = details.message,
+//                                movieDetails = null
+//                            )
+//                    }
+//
+//                    else -> Unit
+//                }
+//
+//                when (val result = casts.await()) {
+//                    is Resource.Success -> {
+//                        state = state.copy(
+//                            castsList = result.data ?: emptyList(),
+//                            isLoading = false,
+//                            error = null
+//                        )
+//                    }
+//                    is Resource.Error -> {
+//                        state =
+//                            state.copy(
+//                                isLoading = false,
+//                                error = result.message,
+//                                movieDetails = null
+//                            )
+//                    }
+//                    else -> Unit
+//                }
+//            }
+//
+//        }
     }
 
 }

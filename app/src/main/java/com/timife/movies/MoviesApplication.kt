@@ -2,6 +2,14 @@ package com.timife.movies
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
-class MoviesApplication: Application()
+class MoviesApplication: Application(){
+    override fun onCreate() {
+        super.onCreate()
+        if(BuildConfig.DEBUG){
+            Timber.plant(Timber.DebugTree())
+        }
+    }
+}

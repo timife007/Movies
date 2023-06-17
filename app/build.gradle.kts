@@ -25,19 +25,22 @@ android {
 
 
         val apiKey = project.properties["api_key"]
-        buildConfigField("String", "API_KEY","\"$apiKey\"")
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
 
         val baseUrl = project.properties["base_url"]
-        buildConfigField("String", "BASE_URL","\"$baseUrl\"")
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 
         val imageBaseUrl = project.properties["image_base_url"]
-        buildConfigField("String", "IMAGE_BASE_URL","\"$imageBaseUrl\"")
+        buildConfigField("String", "IMAGE_BASE_URL", "\"$imageBaseUrl\"")
     }
 
     buildTypes {
         val release by getting {
             isMinifyEnabled = true
-            proguardFiles (getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -61,90 +64,95 @@ android {
 dependencies {
 
     implementation(Deps.coreKtx)
-    implementation (Deps.lifecycle)
+    implementation(Deps.lifecycle)
 
-    implementation (Deps.activityCompose)
-    implementation (Deps.composeUi)
-    implementation (Deps.composeTooling)
-    implementation (Deps.composeMaterial)
-    testImplementation (Deps.junitTest)
-    androidTestImplementation (Deps.junitExt)
+    implementation(Deps.activityCompose)
+    implementation(Deps.composeUi)
+    implementation(Deps.composeTooling)
+    implementation(Deps.composeMaterial)
+    testImplementation(Deps.junitTest)
+    androidTestImplementation(Deps.junitExt)
 //    androidTestImplementation (Deps.espresso)
-    androidTestImplementation (Deps.composeUiTest)
-    debugImplementation (Deps.composeUiTest)
-    debugImplementation (Deps.uiManifest)
+    androidTestImplementation(Deps.composeUiTest)
+    debugImplementation(Deps.composeUiTest)
+    debugImplementation(Deps.uiManifest)
 
     //di
     implementation(Deps.hilt)
     kapt(Deps.hiltAndroidCompiler)
-    kapt (Deps.hiltCompiler)
+    kapt(Deps.hiltCompiler)
 
     //Room
-    implementation (Deps.room)
-    implementation (Deps.roomKtx)
-    kapt (Deps.roomCompiler)
+    implementation(Deps.room)
+    implementation(Deps.roomKtx)
+    kapt(Deps.roomCompiler)
 
     // Retrofit
-    implementation (Deps.retrofit)
-    implementation (Deps.moshi)
-    implementation (Deps.okHttp)
-    implementation (Deps.interceptor)
-    implementation (Deps.coroutinesAdapter)
-    implementation (Deps.jsonSerialize)
+    implementation(Deps.retrofit)
+    implementation(Deps.moshi)
+    implementation(Deps.okHttp)
+    implementation(Deps.interceptor)
+    implementation(Deps.coroutinesAdapter)
+    implementation(Deps.jsonSerialize)
 
     // Compose dependencies
-    implementation (Deps.viewModelCompose)
-    implementation (Deps.materialIcons)
-    implementation (Deps.flowLayout)
-    implementation (Deps.swipeRefresh)
-    implementation (Deps.hiltCompose)
-    implementation (Deps.coilSvg)
-    implementation (Deps.coilAccompanist)
+    implementation(Deps.viewModelCompose)
+    implementation(Deps.materialIcons)
+    implementation(Deps.flowLayout)
+    implementation(Deps.swipeRefresh)
+    implementation(Deps.hiltCompose)
+    implementation(Deps.coilSvg)
+    implementation(Deps.coilAccompanist)
 
     //Paging
-    implementation (Deps.pagingCompose)
-    implementation (Deps.paging)
-    implementation (Deps.roomPaging)
-    implementation (Deps.rxJavaPaging)
+    implementation(Deps.pagingCompose)
+    implementation(Deps.paging)
+    implementation(Deps.roomPaging)
+    implementation(Deps.rxJavaPaging)
 
+    //RxJava
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+    implementation(Deps.rxJavaRetrofitAdapter)
+    implementation(Deps.rxJavaRoom)
 
-    implementation (Deps.composeNavigation)
-    implementation (Deps.composeLifecycle)
+    implementation(Deps.composeNavigation)
+    implementation(Deps.composeLifecycle)
 
     // Coil
-    implementation (Deps.coil)
+    implementation(Deps.coil)
 
     //Coroutines
-    implementation (Deps.coroutineCore)
-    implementation (Deps.coroutinesAndroid)
-    implementation (Deps.coroutinesPlay)
+    implementation(Deps.coroutineCore)
+    implementation(Deps.coroutinesAndroid)
+    implementation(Deps.coroutinesPlay)
 
     //Logging
-    implementation (Deps.timber)
+    implementation(Deps.timber)
 
     // Chucker for analysing network traffic
-    debugImplementation (Deps.chuckerLib)
-    releaseImplementation (Deps.chuckerNoOp)
+    debugImplementation(Deps.chuckerLib)
+    releaseImplementation(Deps.chuckerNoOp)
     //leak canary to detect memory leaks
-    debugImplementation (Deps.canary)
+    debugImplementation(Deps.canary)
 
     // Chucker for analysing network traffic
-    debugImplementation (Deps.chuckerLib)
-    releaseImplementation (Deps.chuckerNoOp)
+    debugImplementation(Deps.chuckerLib)
+    releaseImplementation(Deps.chuckerNoOp)
 
     //Tests
-    testImplementation (Deps.coroutinesTest)
-    testImplementation (Deps.junitTest)
-    testImplementation (Deps.coreTest)
-    testImplementation (Deps.truth)
-    testImplementation (Deps.turbine)
-    testImplementation (Deps.mockk)
+    testImplementation(Deps.coroutinesTest)
+    testImplementation(Deps.junitTest)
+    testImplementation(Deps.coreTest)
+    testImplementation(Deps.truth)
+    testImplementation(Deps.turbine)
+    testImplementation(Deps.mockk)
 //    testImplementation (Deps.runner)
 
     //Instrumentation Tests
 //    androidTestImplementation (Deps.espresso)
-    androidTestImplementation (Deps.junitExt)
-    androidTestImplementation (Deps.truth)
-    androidTestImplementation (Deps.coroutinesTest)
-    androidTestImplementation (Deps.coreTest)
+    androidTestImplementation(Deps.junitExt)
+    androidTestImplementation(Deps.truth)
+    androidTestImplementation(Deps.coroutinesTest)
+    androidTestImplementation(Deps.coreTest)
 }

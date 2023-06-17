@@ -12,12 +12,12 @@ import com.timife.movies.data.local.model.MoviesEntity
 interface MovieDao {
 
     @Upsert
-    suspend fun upsertMovies(
+    fun upsertMovies(
         moviesEntity: List<MoviesEntity>,
     )
 
     @Query("DELETE FROM moviesEntity")
-    suspend fun clearMovies()
+    fun clearMovies()
 
     @Query("SELECT * FROM moviesEntity")
     fun getPagedMovies(): PagingSource<Int, MoviesEntity>

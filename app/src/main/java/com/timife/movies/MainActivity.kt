@@ -12,6 +12,7 @@ import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.asFlow
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(Screen.DiscoverMoviesScreen.route) {
                         DiscoverMoviesScreen(
-                            movies = viewModel.pagedMovies.collectAsLazyPagingItems(),
+                            movies = viewModel.movies.asFlow().collectAsLazyPagingItems(),
                             navController = navController
                         )
                     }

@@ -36,4 +36,6 @@ object Versions {
     const val okHttp = "5.0.0-alpha.3"
     const val navigationCompose = "2.5.3"
     const val json_serialization = "1.3.0"
+    const val rxJava = "3.1.6"
+    const val rxAndroid = "3.0.2"
 }
