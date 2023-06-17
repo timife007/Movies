@@ -1,16 +1,17 @@
 package com.timife.movies.data.pagination
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
+import androidx.paging.rxjava3.RxRemoteMediator
 import com.timife.movies.data.local.database.MovieDatabase
 import com.timife.movies.data.local.model.MoviesEntity
 import com.timife.movies.data.mappers.toMoviesEntity
 import com.timife.movies.data.remote.MoviesApi
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -18,48 +19,60 @@ import javax.inject.Inject
 class MovieRemoteMediator @Inject constructor(
     private val api: MoviesApi,
     private val database: MovieDatabase,
-) : RemoteMediator<Int, MoviesEntity>() {
+) : RxRemoteMediator<Int, MoviesEntity>() {
     private val remoteKeyDao = database.keyDao
     private val moviesDao = database.dao
 
-    override suspend fun load(
+    override fun loadSingle(
         loadType: LoadType,
         state: PagingState<Int, MoviesEntity>,
-    ): MediatorResult {
-        return try {
-            val loadKey = when (loadType) {
-                LoadType.REFRESH -> 1
-                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-                LoadType.APPEND -> {
-                    val remoteKey = database.withTransaction {
-                        remoteKeyDao.getRemoteKey()
-                    }
-                    if (remoteKey.loadKey == null) {
-                        1
-                    } else {
-                        remoteKeyDao.getRemoteKey().loadKey!! + 1 //2
-                    }
-                }
+    ): Single<MediatorResult> {
+        val loadKey = when (loadType) {
+            LoadType.REFRESH -> {
+                Single.just(RemoteKey("", 0))
             }
-            val movies = api.discoverMovies(page = loadKey)
 
-            database.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    moviesDao.clearMovies()
-                    remoteKeyDao.deleteRemoteKey()
-                }
-                val moviesEntity = movies.moviesDto?.map {
-                    it.toMoviesEntity()
-                }
-                moviesDao.upsertMovies(moviesEntity ?: emptyList())
-                remoteKeyDao.insertOrReplace(RemoteKey("", movies.page))
+            LoadType.PREPEND -> {
+                return Single.just(MediatorResult.Success(endOfPaginationReached = true))
             }
-            MediatorResult.Success(endOfPaginationReached = movies.moviesDto?.isEmpty() ?: true)
 
-        } catch (e: IOException) {
-            MediatorResult.Error(e)
-        } catch (e: HttpException) {
-            MediatorResult.Error(e)
+            LoadType.APPEND -> {
+                remoteKeyDao.getRemoteKey()
+            }
         }
+
+        return loadKey
+            .subscribeOn(Schedulers.io())
+            .flatMap<MediatorResult> { remoteKey ->
+                if (loadType != LoadType.REFRESH && remoteKey.loadKey == null) {
+                    Single.just(MediatorResult.Success(true))
+                } else {
+                    Timber.tag("localKey").d(remoteKey.loadKey.toString())
+                    api.discoverMovies(page = remoteKey.loadKey!! + 1).firstOrError()
+                        .map { response ->
+                            database.runInTransaction {
+                                if (loadType == LoadType.REFRESH) {
+                                    moviesDao.clearMovies()
+                                    remoteKeyDao.deleteRemoteKey()
+                                }
+                                val moviesEntity = response.moviesDto?.map {
+                                    it.toMoviesEntity()
+                                }
+                                moviesDao.upsertMovies(moviesEntity ?: emptyList())
+                                remoteKeyDao.insertOrReplace(RemoteKey("", response.page))
+                                Timber.tag("key").d(response.page.toString())
+                            }
+                            MediatorResult.Success(
+                                endOfPaginationReached = response.moviesDto?.isEmpty() ?: true
+                            )
+                        }
+                }
+            }.onErrorResumeNext {
+                if (it is IOException || it is HttpException) {
+                    Single.just(MediatorResult.Error(it))
+                } else {
+                    Single.error(it)
+                }
+            }
     }
 }

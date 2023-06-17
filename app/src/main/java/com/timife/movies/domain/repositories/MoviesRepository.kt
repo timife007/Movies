@@ -4,17 +4,17 @@ import androidx.paging.PagingData
 import com.timife.movies.domain.model.Cast
 import com.timife.movies.domain.model.Movie
 import com.timife.movies.domain.model.MovieDetails
-import com.timife.movies.utils.Resource
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
 
 interface MoviesRepository {
-    fun getPagedData(): Flow<PagingData<Movie>>
+    fun getPagedData(): Flowable<PagingData<Movie>>
 
-    suspend fun getMovieDetails(
+    fun getMovieDetails(
         id:Int
-    ): Resource<MovieDetails>
+    ): Observable<MovieDetails>
 
-    suspend fun getMovieCasts(
+    fun getMovieCasts(
         id:Int
-    ):Resource<List<Cast>>
+    ):Observable<List<Cast>>
 }

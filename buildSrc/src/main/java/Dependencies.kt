@@ -1,5 +1,9 @@
 object Deps {
-    val rxJavaPaging by lazy {" androidx.paging:paging-rxjava3:${Versions.paging}"}
+    val rxJavaPaging by lazy {"androidx.paging:paging-rxjava3:${Versions.paging}"}
+    val rxJava by lazy {"io.reactivex.rxjava3:rxjava:${Versions.rxJava}"}
+    val rxAndroid by lazy {"io.reactivex.rxjava3:rxandroid:${Versions.rxAndroid}"}
+    val rxJavaRetrofitAdapter by lazy {"com.squareup.retrofit2:adapter-rxjava3:${Versions.retrofit}"}
+    val rxJavaRoom by lazy {"androidx.room:room-rxjava3:${Versions.room}"}
     val coreKtx by lazy { "androidx.core:core-ktx:${Versions.coreKtx}" }
     val lifecycle by lazy { "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}" }
     val composeMaterial by lazy { "androidx.compose.material:material:${Versions.compose_ui_version}" }

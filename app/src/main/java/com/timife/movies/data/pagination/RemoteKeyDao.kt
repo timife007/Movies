@@ -4,15 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface RemoteKeyDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insertOrReplace(remoteKey: RemoteKey)
+  fun insertOrReplace(remoteKey: RemoteKey)
 
   @Query("SELECT * FROM remote_keys")
-  suspend fun getRemoteKey(): RemoteKey
+  fun getRemoteKey(): Single<RemoteKey>
 
   @Query("DELETE FROM remote_keys")
-  suspend fun deleteRemoteKey()
+  fun deleteRemoteKey()
 }

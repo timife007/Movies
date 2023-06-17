@@ -1,11 +1,8 @@
 package com.timife.movies
 
 import android.os.Bundle
-import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ExperimentalComposeApi
@@ -40,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(Screen.DiscoverMoviesScreen.route) {
                         DiscoverMoviesScreen(
-                            movies = viewModel.pagedMovies.collectAsLazyPagingItems(),
+                            movies = viewModel.movies.collectAsLazyPagingItems(),
                             navController = navController
                         )
                     }

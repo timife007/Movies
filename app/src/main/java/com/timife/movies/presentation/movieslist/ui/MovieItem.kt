@@ -29,7 +29,7 @@ import com.timife.movies.ui.theme.PurpleGrey80
 @Composable
 fun MovieItem(
     modifier: Modifier = Modifier,
-    movie: Movie
+    movie: Movie,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -69,11 +69,14 @@ fun MovieItem(
             }
 
             Text(
-                text = if (movie.original_language == "fr") "French" else "English", modifier = Modifier
+                text = if (movie.original_language == "fr") "French" else "English",
+                modifier = Modifier
                     .padding(top = 5.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = PurpleGrey80)
-                    .scale(0.7f), color = Purple40, fontSize = 18.sp
+                    .scale(0.7f),
+                color = Purple40,
+                fontSize = 18.sp
             )
 
             Text(
