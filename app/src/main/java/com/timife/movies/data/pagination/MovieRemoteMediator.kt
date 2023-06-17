@@ -1,13 +1,9 @@
 package com.timife.movies.data.pagination
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
 import androidx.paging.rxjava3.RxRemoteMediator
-import androidx.room.withTransaction
 import com.timife.movies.data.local.database.MovieDatabase
 import com.timife.movies.data.local.model.MoviesEntity
 import com.timife.movies.data.mappers.toMoviesEntity
