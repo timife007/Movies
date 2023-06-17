@@ -13,14 +13,8 @@ import com.timife.movies.domain.model.Cast
 import com.timife.movies.domain.model.Movie
 import com.timife.movies.domain.model.MovieDetails
 import com.timife.movies.domain.repositories.MoviesRepository
-import com.timife.movies.utils.Resource
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import retrofit2.HttpException
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
