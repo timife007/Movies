@@ -26,7 +26,7 @@ class MoviesViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun fetchPagedData() = repository
+    fun fetchPagedData() = repository
         .getPagedData()
         .cachedIn(viewModelScope)
         .subscribeOn(Schedulers.io())

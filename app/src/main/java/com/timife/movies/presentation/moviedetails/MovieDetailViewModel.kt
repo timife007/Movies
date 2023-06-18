@@ -15,13 +15,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val moviesRepository: MoviesRepository,
 ) : ViewModel() {
 
     var state by mutableStateOf(MovieDetailsState())
 
     init {
+        fetchDetails()
+    }
+
+    fun fetchDetails(){
         savedStateHandle.get<Int>("movieId")?.let { id ->
             val movieDetails = moviesRepository
                 .getMovieDetails(id)

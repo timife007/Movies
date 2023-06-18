@@ -1,6 +1,7 @@
 package com.timife.movies.presentation.moviedetails.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
@@ -29,18 +32,23 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.timife.movies.BuildConfig
 import com.timife.movies.domain.model.Cast
 import com.timife.movies.domain.model.MovieDetails
@@ -58,33 +66,60 @@ fun MovieDetailScreen(
 ) {
     val state = viewModel.state
 
-    if (state.error == null) {
+    Box {
 
-        state.movieDetails?.let { details ->
-            BackdropScaffold(
-                appBar = { },
-                backLayerContent = { MovieDetailBack(movie = details, navController) },
-                frontLayerContent = { MovieDetailFront(state) },
-                backLayerBackgroundColor = Color.Transparent,
-                frontLayerBackgroundColor = MaterialTheme.colors.background,
-                stickyFrontLayer = true,
-                peekHeight = 260.dp
-            ) {
+        if (state.error == null) {
+            state.movieDetails?.let { details ->
+                BackdropScaffold(
+                    appBar = { },
+                    backLayerContent = { MovieDetailBack(movie = details, navController) },
+                    frontLayerContent = { MovieDetailFront(state) },
+                    backLayerBackgroundColor = Color.Transparent,
+                    frontLayerBackgroundColor = MaterialTheme.colors.background,
+                    stickyFrontLayer = true,
+                    peekHeight = 300.dp
+                ) {
 
+                }
             }
         }
+        IconButton(onClick = { navController.navigateUp() }) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "ArrowBack",
+                modifier = Modifier.size(30.dp),
+                tint = Color.Gray
+            )
+        }
+
     }
+
+
+
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (state.isLoading) {
             CircularProgressIndicator()
         } else if (state.error != null) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colors.onPrimary
-            )
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Please check internet connection",
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colors.onPrimary
+                )
+                Text(text = "Retry", color = Color.Green, modifier = Modifier.clickable {
+                    viewModel.fetchDetails()
+                })
+
+            }
+
         }
     }
+
 }
 
 
@@ -92,19 +127,13 @@ fun MovieDetailScreen(
 fun MovieDetailBack(movie: MovieDetails, navController: NavController) {
     val imageLink = BuildConfig.IMAGE_BASE_URL + movie.backdropPath
     Box {
+
         AsyncImage(
             model = imageLink, contentDescription = "backdropImage", modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.4f), contentScale = ContentScale.Crop
+                .fillMaxHeight(0.6f), contentScale = ContentScale.Crop
         )
-        IconButton(onClick = { navController.navigateUp() }) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "ArrowBack",
-                modifier = Modifier.size(30.dp),
-                tint = Color.LightGray
-            )
-        }
+
     }
 }
 
@@ -112,7 +141,12 @@ fun MovieDetailBack(movie: MovieDetails, navController: NavController) {
 fun MovieDetailFront(
     state: MovieDetailsState,
 ) {
-    Column(modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            .verticalScroll(scrollState)
+    ) {
         Row(
             modifier = Modifier,
             horizontalArrangement = Arrangement.SpaceEvenly

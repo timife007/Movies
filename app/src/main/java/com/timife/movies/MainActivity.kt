@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(Screen.DiscoverMoviesScreen.route) {
                         DiscoverMoviesScreen(
-                            movies = viewModel.movies.collectAsLazyPagingItems(),
                             navController = navController
                         )
                     }
