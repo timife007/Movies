@@ -1,6 +1,7 @@
 package com.timife.movies.presentation.movieslist.ui
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -38,11 +39,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Shapes
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkRemove
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +54,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,6 +73,8 @@ import com.timife.movies.presentation.movieslist.MoviesViewModel
 import com.timife.movies.ui.theme.Purple40
 import com.timife.movies.ui.theme.PurpleGrey80
 import com.timife.movies.ui.theme.Shapes
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeApi
@@ -139,40 +146,76 @@ fun DiscoverMoviesScreen(
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (movies.loadState.refresh is LoadState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else if (movies.loadState.refresh is LoadState.Error && movies.itemCount == 0) {
-                (movies.loadState.refresh as LoadState.Error).error.message?.let {
+            } else if (movies.loadState.refresh is LoadState.Error) {
+                if (movies.itemCount == 0) {
+                    (movies.loadState.refresh as LoadState.Error).error.message?.let {
+                        Column(
+                            modifier = Modifier,
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                imageVector = Icons.Default.ErrorOutline,
+                                contentDescription = "Unexpected error",
+                                modifier = Modifier.size(100.dp),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                            )
+                            Text(
+                                text = "Please check internet connection",
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Retry",
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(30.dp))
+                                    .clickable {
+                                        if (filterState.filterItem == "All") {
+                                            viewModel.fetchPagedData()
+                                        } else {
+                                            viewModel.fetchPagedFavourites()
+                                        }
+                                    }
+                                    .background(color = Color.Gray)
+                                    .scale(0.6f),
+                                color = Color.White,
+                                fontSize = 30.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
+                    val context = LocalContext.current
+                    LaunchedEffect(key1 = movies.loadState) {
+                        Toast.makeText(
+                            context,
+                            "Please check your internet connection",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } else if (movies.loadState.refresh is LoadState.NotLoading && movies.itemCount == 0) {
+                if (filterState.filterItem == "Favourites") {
                     Column(
                         modifier = Modifier,
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            imageVector = Icons.Default.ErrorOutline,
+                            imageVector = Icons.Outlined.BookmarkRemove,
                             contentDescription = "Unexpected error",
                             modifier = Modifier.size(100.dp),
                             colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                         )
                         Text(
-                            text = "Please check internet connection",
+                            text = "No Favourites Found",
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colors.onPrimary
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Retry",
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(30.dp))
-                                .clickable {
-                                    viewModel.fetchPagedData()
-                                }
-                                .background(color = Color.Gray)
-                                .scale(0.6f),
-                            color = Color.White,
-                            fontSize = 30.sp,
-                            textAlign = TextAlign.Center
-                        )
                     }
                 }
+
             }
         }
     }
