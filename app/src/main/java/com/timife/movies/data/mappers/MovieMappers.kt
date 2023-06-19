@@ -28,7 +28,20 @@ fun MoviesEntity.toMovie(): Movie {
         poster_path = poster_path,
         release_date = release_date,
         title = title,
-        vote_average = vote_average
+        vote_average = vote_average,
+        isFavourite = isFavourite
+    )
+}
+
+fun Movie.toMoviesEntity(): MoviesEntity {
+    return MoviesEntity(
+        id = id ?: 0,
+        original_language = original_language,
+        poster_path = poster_path,
+        release_date = release_date,
+        title = title,
+        vote_average = vote_average,
+        isFavourite = isFavourite
     )
 }
 
@@ -67,3 +80,4 @@ fun CastDto.toCast(): Cast {
         profilePath = profilePath ?: ""
     )
 }
+

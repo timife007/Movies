@@ -7,14 +7,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.timife.movies.data.local.model.MoviesEntity
+import io.reactivex.rxjava3.core.Completable
 
 @Dao
-interface MovieDao {
+interface MoviesDao {
 
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun upsertMovies(
         moviesEntity: List<MoviesEntity>,
     )
+
+    @Query("UPDATE moviesEntity SET isFavourite = :isFavourite WHERE id = :id")
+    fun updateMovie(id: Int, isFavourite: Boolean):Completable
 
     @Query("DELETE FROM moviesEntity")
     fun clearMovies()

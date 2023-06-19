@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
+import com.timife.movies.data.local.database.MoviesDao
 import com.timife.movies.data.local.database.MovieDatabase
 import com.timife.movies.data.local.model.MoviesEntity
 import com.timife.movies.data.pagination.MovieRemoteMediator
@@ -26,6 +27,14 @@ object DatabaseModule {
             MovieDatabase::class.java,
             "movies.db"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMoviesDao(
+        moviesDatabase: MovieDatabase
+    ): MoviesDao {
+        return moviesDatabase.dao
     }
 
     @OptIn(ExperimentalPagingApi::class)

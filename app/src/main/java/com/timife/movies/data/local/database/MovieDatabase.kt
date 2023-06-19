@@ -12,6 +12,6 @@ import com.timife.movies.data.pagination.RemoteKeyDao
     exportSchema = false
 )
 abstract class MovieDatabase : RoomDatabase() {
-    abstract val dao: MovieDao
+    abstract val dao: MoviesDao
     abstract val keyDao:RemoteKeyDao
 }

@@ -1,5 +1,6 @@
 package com.timife.movies.presentation.moviedetails.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -106,15 +109,32 @@ fun MovieDetailScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Image(
+                    imageVector = Icons.Default.ErrorOutline,
+                    contentDescription = "Unexpected error",
+                    modifier = Modifier.size(100.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                )
                 Text(
                     text = "Please check internet connection",
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.onPrimary
                 )
-                Text(text = "Retry", color = Color.Green, modifier = Modifier.clickable {
-                    viewModel.fetchDetails()
-                })
-
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Retry",
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(30.dp))
+                        .clickable {
+                            viewModel.fetchDetails()
+                        }
+                        .background(color = Color.Gray)
+                        .scale(0.6f)
+                    ,
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    textAlign = TextAlign.Center
+                )
             }
 
         }

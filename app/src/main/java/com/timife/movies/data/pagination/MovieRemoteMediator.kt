@@ -48,11 +48,10 @@ class MovieRemoteMediator @Inject constructor(
                     Single.just(MediatorResult.Success(true))
                 } else {
                     Timber.tag("localKey").d(remoteKey.loadKey.toString())
-                    api.discoverMovies(page = remoteKey.loadKey!! + 1).firstOrError()
+                    api.discoverMovies(page = remoteKey.loadKey!! + 1)
                         .map { response ->
                             database.runInTransaction {
                                 if (loadType == LoadType.REFRESH) {
-                                    moviesDao.clearMovies()
                                     remoteKeyDao.deleteRemoteKey()
                                 }
                                 val moviesEntity = response.moviesDto?.map {

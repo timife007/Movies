@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     private val repository: MoviesRepository,
@@ -21,11 +22,18 @@ class MoviesViewModel @Inject constructor(
     private val _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     val movies: StateFlow<PagingData<Movie>> get() = _movies
 
+    private val _filterState = MutableStateFlow<FilterState>(FilterState())
+    val filterState: StateFlow<FilterState> get() = _filterState
+
+
     init {
         fetchPagedData()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    fun filter(item:String){
+        _filterState.value = FilterState(filterItem = item)
+    }
+
     fun fetchPagedData() = repository
         .getPagedData()
         .cachedIn(viewModelScope)
@@ -34,4 +42,17 @@ class MoviesViewModel @Inject constructor(
         .subscribe {
             _movies.value = it
         }
+
+    fun fetchPagedFavourites() = repository
+        .getPagedFavourites()
+        .cachedIn(viewModelScope)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+            _movies.value = it
+        }
+
+    fun toggleFavourite(id:Int, isFavourite:Boolean){
+        repository.toggleFavourite(id,isFavourite)
+    }
 }

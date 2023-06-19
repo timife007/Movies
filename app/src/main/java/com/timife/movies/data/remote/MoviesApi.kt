@@ -16,7 +16,7 @@ interface MoviesApi {
     fun discoverMovies(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
         @Query("page") page: Int,
-    ): Flowable<DiscoverMovies>
+    ): Single<DiscoverMovies>
 
     @GET("movie/{movie_id}?language=en-US")
     fun getMovieDetails(
