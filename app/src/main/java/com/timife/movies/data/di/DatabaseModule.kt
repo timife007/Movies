@@ -39,7 +39,6 @@ object DatabaseModule {
 
     @OptIn(ExperimentalPagingApi::class)
     @Provides
-    @Singleton
     fun provideMoviesPager(
         moviesDatabase: MovieDatabase,
         moviesApi: MoviesApi,

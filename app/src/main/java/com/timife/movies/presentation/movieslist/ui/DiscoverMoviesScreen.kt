@@ -82,7 +82,7 @@ import kotlinx.coroutines.delay
 fun DiscoverMoviesScreen(
     navController: NavController,
 ) {
-    val viewModel = hiltViewModel<MoviesViewModel>()
+    val viewModel : MoviesViewModel = hiltViewModel()
     val movies = viewModel.movies.collectAsLazyPagingItems()
     val filterState = viewModel.filterState.collectAsStateWithLifecycle().value
     Scaffold(
@@ -144,10 +144,10 @@ fun DiscoverMoviesScreen(
             }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
             if (movies.loadState.refresh is LoadState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else if (movies.loadState.refresh is LoadState.Error) {
-                if (movies.itemCount == 0) {
+            } else if (movies.loadState.refresh is LoadState.Error && movies.itemCount == 0) {
                     (movies.loadState.refresh as LoadState.Error).error.message?.let {
                         Column(
                             modifier = Modifier,
@@ -185,16 +185,6 @@ fun DiscoverMoviesScreen(
                             )
                         }
                     }
-                } else {
-                    val context = LocalContext.current
-                    LaunchedEffect(key1 = movies.loadState) {
-                        Toast.makeText(
-                            context,
-                            "Please check your internet connection",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
             } else if (movies.loadState.refresh is LoadState.NotLoading && movies.itemCount == 0) {
                 if (filterState.filterItem == "Favourites") {
                     Column(

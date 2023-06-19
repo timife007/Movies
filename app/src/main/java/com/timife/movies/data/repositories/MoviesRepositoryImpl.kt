@@ -24,7 +24,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class MoviesRepositoryImpl @Inject constructor(
     private val pager: Pager<Int, MoviesEntity>,
     private val api: MoviesApi,

@@ -22,7 +22,7 @@ class MoviesViewModel @Inject constructor(
     private val _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     val movies: StateFlow<PagingData<Movie>> get() = _movies
 
-    private val _filterState = MutableStateFlow<FilterState>(FilterState())
+    private val _filterState = MutableStateFlow(FilterState())
     val filterState: StateFlow<FilterState> get() = _filterState
 
 
