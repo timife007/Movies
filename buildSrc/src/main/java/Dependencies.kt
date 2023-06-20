@@ -55,5 +55,12 @@ object Deps {
     val mockk by lazy { "io.mockk:mockk:${Versions.mockk}" }
     val truth by lazy { "com.google.truth:truth:${Versions.truth}" }
     val espresso by lazy { "androidx.test.espresso:espresso-core:${Versions.espresso}" }
+//    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    // Optional -- mockito-kotlin
+//    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
+    val mockitoCore by lazy {"org.mockito:mockito-core:${Versions.mockito}"}
+    val mockitoKotlin by lazy {"org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}"}
+    val rxjavaTest by lazy {"io.reactivex.rxjava3:rxjava-test:${Versions.rxJava}"}
+    val navTest by lazy {"androidx.navigation:navigation-testing:${Versions.navTest}"}
 
 }

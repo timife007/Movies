@@ -147,7 +147,10 @@ dependencies {
     testImplementation(Deps.truth)
     testImplementation(Deps.turbine)
     testImplementation(Deps.mockk)
-//    testImplementation (Deps.runner)
+    testImplementation (Deps.mockitoCore)
+    testImplementation (Deps.mockitoKotlin)
+
+
 
     //Instrumentation Tests
 //    androidTestImplementation (Deps.espresso)
@@ -155,4 +158,9 @@ dependencies {
     androidTestImplementation(Deps.truth)
     androidTestImplementation(Deps.coroutinesTest)
     androidTestImplementation(Deps.coreTest)
+    androidTestImplementation(Deps.mockitoCore)
+    androidTestImplementation(Deps.mockitoKotlin)
+    androidTestImplementation(Deps.navTest)
+
+
 }

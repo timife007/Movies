@@ -105,7 +105,7 @@ fun MovieItem(
                             } else {
                                 Icons.Default.FavoriteBorder
                             },
-                            contentDescription = null
+                            contentDescription = "Favourites icon"
                         )
                     }
 

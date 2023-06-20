@@ -38,4 +38,7 @@ object Versions {
     const val json_serialization = "1.3.0"
     const val rxJava = "3.1.6"
     const val rxAndroid = "3.0.2"
+    const val mockitoKotlin = "5.0.0"
+    const val mockito = "5.4.0"
+    const val navTest = "2.6.0"
 }

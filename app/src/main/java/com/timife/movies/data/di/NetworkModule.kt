@@ -22,26 +22,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiService(app: Application): MoviesApi {
-        val chuckerInterceptor = ChuckerInterceptor.Builder(app)
-            .collector(
-                ChuckerCollector(
-                    app,
-                    showNotification = true,
-                    retentionPeriod = RetentionManager.Period.ONE_WEEK
-                )
-            )
-            .maxContentLength(250000L)
-            .redactHeaders(emptySet())
-            .alwaysReadResponseBody(false)
-            .build()
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(chuckerInterceptor)
-            .build()
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
-            .client(client)
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
